@@ -1,17 +1,16 @@
 package RegrasNegocio;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import Classes.Boleto;
 import Classes.Condominio;
 import Classes.Morador;
-import DAOdb4o.DAO;
-import DAOdb4o.DAOBoleto;
-import DAOdb4o.DAOCondominio;
-import DAOdb4o.DAOMorador;
+import daoJPA.DAO;
+import daoJPA.DAOBoleto;
+import daoJPA.DAOCondominio;
+import daoJPA.DAOMorador;
 
 public class Fachada {
 	private Fachada() {}
@@ -53,6 +52,7 @@ public class Fachada {
 		Boleto boleto = Fachada.buscarBoleto(codBarras);
 		
 		if(boleto == null) {
+			DAO.rollback();
 			throw new Exception("O boleto de código "+codBarras+" não existe.");
 		}
 		
@@ -85,16 +85,19 @@ public class Fachada {
 		Boleto boleto = Fachada.buscarBoleto(codBoleto);
 		
 		if(boleto == null) {
+			DAO.rollback();
 			throw new Exception("O boleto de código "+codBoleto+" não existe.");
 		}
 		
 		Morador morador = boleto.getMorador();
 		List<Boleto> boletosNP = Fachada.boletosNPMorador(morador.getCpf());
 		if(boletosNP.size() >= 3) {
+			DAO.rollback();
 			throw new Exception("Existem 3 ou mais boletos em atraso. Entre em acordo para conseguir pagar o atual.");
 		}
 		
 		if(boleto.getPagou() == true) {
+			DAO.rollback();
 			throw new Exception("O boleto de código "+codBoleto+" já foi pago.");
 		}
 		
@@ -156,11 +159,13 @@ public class Fachada {
 		DAO.begin();
 		
 		if(nome.equals("") || endereco.equals("")) {
+			DAO.rollback();
 			throw new Exception("Existem campos vazios. Preencha-os e tente novamente.");
 		}
 		
 		boolean cadastrado = daocondominio.condExiste(endereco);
 		if(cadastrado) {
+			DAO.rollback();
 			throw new Exception("Um condomínio com o endereço "+endereco+" já está cadastrado.");
 		}
 		
@@ -176,8 +181,10 @@ public class Fachada {
 		Condominio condominio = Fachada.buscarCondominio(id);
 		
 		if(condominio == null) {
+			DAO.rollback();
 			throw new Exception("O condomínio de ID "+id+" não está cadastrado.");
 		} else if(condominio.getMoradores().size() > 0) {
+			DAO.rollback();
 			throw new Exception("O condomínio não pode ser excluído porque ainda tem moradores registrados.");
 		}
 		
@@ -236,10 +243,12 @@ public class Fachada {
 		DAO.begin();
 		Morador morador = Fachada.buscarMorador(cpf);
 		if(morador != null) {
+			DAO.rollback();
 			throw new Exception("O morador de CPF "+cpf+" já está cadastrado.");
 		}
 		
 		if(nome.equals("") || cpf.equals("")) {
+			DAO.rollback();
 			throw new Exception("Existem campos vazios. Preencha-os e tente novamente.");
 		}
 		
@@ -254,6 +263,7 @@ public class Fachada {
 		Morador morador = Fachada.buscarMorador(cpf);
 		
 		if(morador == null) {
+			DAO.rollback();
 			throw new Exception("O morador de CPF "+cpf+" não está cadastrado.");
 		}
 		
@@ -266,6 +276,7 @@ public class Fachada {
 		if(morador.getBoletos().size() > 0) {
 			for(Boleto b : morador.getBoletos()) {
 				if(b.getPagou() == false) {
+					DAO.rollback();
 					throw new Exception("O morador "+morador.getNome()+" não pode ser excluído porque ainda existem boletos pendentes no seu nome.");
 				}
 				daoboleto.delete(b);
@@ -335,10 +346,12 @@ public class Fachada {
 		
 		Condominio condominio = Fachada.buscarCondominio(idCond);
 		if(condominio == null) {
+			DAO.rollback();
 			throw new Exception("O condomínio de ID "+idCond+" não existe.");
 		}
 		Morador morador = Fachada.buscarMorador(cpfMorador);
 		if(morador == null) {
+			DAO.rollback();
 			throw new Exception("O morador de CPF "+cpfMorador+" não existe.");
 		}
 		
@@ -390,10 +403,12 @@ public class Fachada {
 		
 		Condominio condominio = Fachada.buscarCondominio(idCond);
 		if(condominio == null) {
+			DAO.rollback();
 			throw new Exception("O condomínio de ID "+idCond+" não existe.");
 		}
 		Morador morador = Fachada.buscarMorador(cpfMorador);
 		if(morador == null) {
+			DAO.rollback();
 			throw new Exception("O morador de CPF "+cpfMorador+" não existe.");
 		}
 		
@@ -419,6 +434,7 @@ public class Fachada {
 				break;
 			}
 		} else {
+			DAO.rollback();
 			throw new Exception("O morador de CPF "+cpfMorador+" não mora no condomínio.");
 		}
 		

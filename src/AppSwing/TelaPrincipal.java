@@ -1,7 +1,6 @@
 package AppSwing;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -22,8 +21,6 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import Classes.Morador;
 import RegrasNegocio.Fachada;
@@ -331,7 +328,6 @@ public class TelaPrincipal {
 		JSeparator separadorV1_1 = new JSeparator();
 		separadorV1_1.setBounds(48, 146, 640, 23);
 		moradores.add(separadorV1_1);
-		moradores.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{lblMoradores, lblCadastrar, inputNome, lblNome, inputCpf, lblCpf, botaoCadastrar, lblListar, separadorV1, listagemMoradores, botaoListar, scrollPane, lblFazerAcordo, lblCpfAcordo, inputCpfAcordo, botaoBuscar, lblNomeAcordo, botaoConfirmar, lblConfimar, exibirNome, lblValorTotal, exibirValor, separadorV1_1}));
 		
 		JPanel condominios = new JPanel();
 		condominios.setLayout(null);

@@ -36,15 +36,15 @@ public class Util {
 					configuracoes.setProperty("jakarta.persistence.jdbc.user", "postgres");
 					configuracoes.setProperty("jakarta.persistence.jdbc.password", "ifpb");
 				}
-				if (sgbd.equals("mysql")) {
-					logger.info("----configurando mysql");
-					configuracoes.setProperty("jakarta.persistence.jdbc.driver", "com.mysql.cj.jdbc.Driver");
-					configuracoes.setProperty("jakarta.persistence.jdbc.url",
-							"jdbc:mysql://" + ip + ":3306/" + banco + "?createDatabaseIfNotExist=true");
-					configuracoes.setProperty("jakarta.persistence.jdbc.user", "root");
-					configuracoes.setProperty("jakarta.persistence.jdbc.password", "");
-				}
-				// -----------------------------------------------------------------------------------
+//				if (sgbd.equals("mysql")) {
+//					logger.info("----configurando mysql");
+//					configuracoes.setProperty("jakarta.persistence.jdbc.driver", "com.mysql.cj.jdbc.Driver");
+//					configuracoes.setProperty("jakarta.persistence.jdbc.url",
+//							"jdbc:mysql://" + ip + ":3306/" + banco + "?createDatabaseIfNotExist=true");
+//					configuracoes.setProperty("jakarta.persistence.jdbc.user", "root");
+//					configuracoes.setProperty("jakarta.persistence.jdbc.password", "");
+//				}
+				
 				String unit_name = "hibernate" + "-" + sgbd;
 				factory = Persistence.createEntityManagerFactory(unit_name, configuracoes);
 				manager = factory.createEntityManager();
